@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>miteshninja</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" media="screen">
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/mithril/0.2.5/mithril.min.js"> </script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.9.25/paper-full.js"> </script>
+        <style media="screen">
+            html, body {
+                height: 100%;
+            }
+            canvas{
+                position: absolute;
+                min-height: 100%;
+                margin: 0;
+                padding: 0;
+                z-index: -1;
+            }
+            #wrap {
+                min-height: 100%;
+            }
+            h1, a{
+                font-size: 70px;
+                color: green;
+            }
+        </style>
+        <script type="text/paperscript" canvas="canvas-1">
+        var mousePoint = view.center;
+        var amount = 25;
+        var colors = ['black', 'white', 'black', 'white'];
+
+        // var rect = new Rectangle([0, 0], [50, 50]);
+        // var path = new Path.Rectangle(rect, 1);
+        // path.strokeColor = 'black';
+        for (var i = 0; i < amount; i++) {
+            // var rect = new Rectangle([0, 0], [50, 50]);
+            var rect = new Path.RegularPolygon(new Point(80, 70), 3, 50);
+            console.log(rect);
+            rect.center = mousePoint;
+            var path = rect;
+            path.fillColor = colors[i % 4];
+            var scale = (1 - i / amount) * 60;
+            path.scale(scale);
+        }
+
+        function onMouseMove(event) {
+            mousePoint = event.point;
+        }
+
+        var children = project.activeLayer.children;
+        function onFrame(event) {
+            for (var i = 0, l = children.length; i < l; i++) {
+                var item = children[i];
+                var delta = (mousePoint - item.position) / (i + 5);
+                // item.rotate(Math.sin((event.count + i) / 10) * 4);
+                item.rotate(((event.count + i*2) / 25) * 2);
+                if (delta.length > 0.1)
+                    item.position += delta;
+            }
+        }
+        </script>
+    </head>
+    <body>
+        <canvas id="canvas-1" resize="true"></canvas>
+        <div class="" id=wrap>
+                <h1><a href="https://oxal.org">oxal.org</a></h1>
+        </div>
+    </body>
+</html>
